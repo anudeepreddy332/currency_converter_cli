@@ -1,4 +1,8 @@
+import os.path
+import pandas as pd
+from datetime import datetime as dt
 import requests
+from tabulate import tabulate
 
 class Currency:
     def __init__(self, amount, from_currency, to_currency):
@@ -37,7 +41,36 @@ class Currency:
             return None
 
         result = self.amount * rate
+        self.log_to_csv(rate, result)
         return result
+
+    def log_to_csv(self, rate, result):
+
+        log_entry = {
+            "Timestamp": dt.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "Amount": self.amount,
+            "From": self.from_currency,
+            "To": self.to_currency,
+            "Rate": round(rate,4),
+            "Converted": round(result,2)
+        }
+        file_path = "history.csv"
+        if os.path.exists(file_path):
+            df = pd.read_csv(file_path)
+            df = pd.concat([df, pd.DataFrame([log_entry])], ignore_index=True)
+        else:
+            df = pd.DataFrame([log_entry])
+
+        df.to_csv(file_path, index=False)
+
+    def show_history(self,limit=10):
+        try:
+            df = pd.read_csv("history.csv")
+            df = df.tail(limit)
+            print("\n📋 Conversion History (Last {}):\n".format(limit))
+            print(tabulate(df, headers='keys', tablefmt='fancy_grid', showindex=False))
+        except FileNotFoundError:
+            print("⚠️ No history found.")
 
     @staticmethod
     def list_currencies():

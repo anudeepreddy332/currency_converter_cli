@@ -13,6 +13,11 @@ def main():
         help="List of available currency codes"
     )
     group.add_argument(
+        "--history",
+        action="store_true",
+        help="Show conversion history"
+    )
+    group.add_argument(
         "--amount",
         type=float,
         help="Amount to convert (required if not using --list)"
@@ -32,6 +37,10 @@ def main():
 
     if args.list:
         Currency.list_currencies()
+        return
+
+    if args.history:
+        Currency(0,"usd","inr").show_history()
         return
 
     if args.amount is None or args.from_currency is None or args.to_currency is None:
