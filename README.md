@@ -6,9 +6,9 @@ A simple command-line tool to convert between world currencies using live exchan
 
 ## 🚀 Features
 
-- Convert from one currency to another
-- Get real-time exchange rates
-- List all available currency codes
+- Converts amounts between over 160 currencies
+- Fetches real-time exchange rates
+- Lists all available currency codes
 - Error handling for invalid inputs
 - Automatically logs each conversion to a `history.csv` file
 - View conversion history with the `--history` flag
